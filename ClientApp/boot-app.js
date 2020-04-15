@@ -1,4 +1,4 @@
-import './css/site.css'
+import './assets/styles/style.css'
 import 'core-js/es6/promise'
 import 'core-js/es6/array'
 

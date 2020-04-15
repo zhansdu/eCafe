@@ -79,21 +79,13 @@ export default {
         window.alert(err)
         console.log(err)
       }
-      // Old promise-based approach
-      // this.$http
-      //    .get('/api/SampleData/WeatherForecasts')
-      //    .then(response => {
-      //        console.log(response.data)
-      //        this.forecasts = response.data
-      //    })
-      //    .catch((error) => console.log(error))*/
     }
   },
 
   async created () {
     this.loadPage(1)
   }
-}
+};
 </script>
 
 <style>

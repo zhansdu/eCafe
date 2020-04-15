@@ -1,11 +1,56 @@
-import CounterExample from 'components/counter-example'
-import FetchData from 'components/fetch-data'
-import HomePage from 'components/home-page'
-import About from 'components/about'
+import user from '../views/user/main'
+import restourant from '../views/user/restourant/main'
+import about from '../views/user/about/main'
+import menu from '../views/user/menu/main'
+import map from '../views/user/map/main'
+
+
+import admin from '../views/admin/main'
+
+
+import login from '../views/login/main'
+
 
 export const routes = [
-  { name: 'home', path: '/', component: HomePage, display: 'Home', icon: 'home' },
-  { name: 'about', path: '/about', component: About, display: 'About Template', icon: 'info' },
-  { name: 'counter', path: '/counter', component: CounterExample, display: 'Counter', icon: 'graduation-cap' },
-  { name: 'fetch-data', path: '/fetch-data', component: FetchData, display: 'Data', icon: 'list' }
+{
+	name:'login',
+	path:'/',
+	component:login
+},
+{
+	name:'admin',
+	path:'/admin',
+	component:user
+},
+{
+	name:'user',
+	path:'/user',
+	component:user,
+	children:[
+	{
+		name:'about',
+		path:'/',
+		component:about,
+		display:'About'
+	},
+	{
+		name:'menu',
+		path:'/menu',
+		component:menu,
+		display:'Menu'
+	},
+	{
+		name:'restourant',
+		path:'/restourant',
+		component:restourant,
+		display:'Restourants'
+	},
+	{
+		name:'map',
+		path:'/map',
+		component:map,
+		display:'Map'
+	}
+	]
+}
 ]
