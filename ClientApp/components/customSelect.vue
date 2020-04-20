@@ -1,6 +1,6 @@
 <template>
 	<select>
-		<option value="" disabled selected v-if="placeholder">{{placeholder}}</option>
+		<option disabled selected class="d-none" v-if="placeholder">{{placeholder}}</option>
 		<option v-for="(option,index) in options" :key="option" @click="handleClick(option)"></option>
 	</select>
 </template>
@@ -22,3 +22,9 @@ export default{
 	}
 };
 </script>
+<style scoped>
+	select{
+		border:1px solid black;
+		padding:3px;
+	}
+</style>
