@@ -25,6 +25,13 @@
     <Folder Include="ClientApp\assets\" />
     <Folder Include="ClientApp\assets\styles\" />
     <Folder Include="ClientApp\assets\images\" />
+    <Folder Include="Providers\" />
+    <Folder Include="Providers\classes\" />
+    <Folder Include="Providers\interfaces\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\WeatherController.cs" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

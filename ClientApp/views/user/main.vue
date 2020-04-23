@@ -54,6 +54,9 @@ export default{
 		return{
 			routes
 		}
+	},
+	created(){
+		this.$http.get('food').then(response=>{console.log(response)});
 	}
 };
 </script>

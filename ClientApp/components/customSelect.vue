@@ -1,19 +1,15 @@
 <template>
 	<select>
 		<option disabled selected class="d-none" v-if="placeholder">{{placeholder}}</option>
-		<option v-for="(option,index) in options" :key="option" @click="handleClick(option)"></option>
+		<option v-for="(option,index) in options" :key="index" @click="handleClick(option)">{{option.label}}</option>
 	</select>
 </template>
 <script type="text/javascript">
 export default{
 	props:{
 		placeholder:String,
-		value:Object
-	},
-	data(){
-		return{
-			options:Array
-		}
+		value:Object,
+		options:Array
 	},
 	methods:{
 		handleClick(option){
@@ -23,8 +19,7 @@ export default{
 };
 </script>
 <style scoped>
-	select{
-		border:1px solid black;
-		padding:3px;
-	}
+select{
+	padding:2.5px;
+}
 </style>

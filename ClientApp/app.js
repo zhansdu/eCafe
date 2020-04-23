@@ -9,7 +9,32 @@ import { FontAwesomeIcon } from './icons'
 // Registration of global components
 Vue.component('icon', FontAwesomeIcon)
 
-Vue.prototype.$http = axios
+class user{
+	constructor(){}
+	create(user){
+		this.user=user;
+	}
+	login(){
+		this.loggedIn=true;
+	}
+	authenticated(){
+		return this.loggedIn;
+	}
+	logout(){
+		this.loggedIn=false;
+	}
+	user(){
+		return this.user;
+	}
+	role(){
+		return this.user.role;
+	}
+}
+
+Vue.prototype.$user=new user();
+Vue.prototype.$http = axios.create({
+	baseURL:'https://localhost:5001/api'
+});
 
 sync(store, router)
 
