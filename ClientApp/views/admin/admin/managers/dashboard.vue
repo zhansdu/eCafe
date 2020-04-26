@@ -17,7 +17,7 @@
 				<div class="col-3 text-center">{{manager.email}}</div>
 				<div class="col-4 text-center">{{manager.firstName}} {{manager.lastName}}</div>
 				<div class="col-1 flex-row justify-content-around">
-					<div class="cursor-pointer" @click="deleteManager(manager.id)"><icon icon="trash"/></div>
+					<div class="cursor-pointer" @click="deleteManager(manager.managerId)"><icon icon="trash"/></div>
 				</div>
 			</div>
 		</div>
@@ -48,10 +48,4 @@ export default{
 };
 </script>
 <style scoped>
-input{
-	background-color: transparent;
-	border:transparent;
-	display: flex;
-	justify-content: center;
-}
 </style>

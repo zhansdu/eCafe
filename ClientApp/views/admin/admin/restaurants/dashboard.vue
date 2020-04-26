@@ -15,9 +15,9 @@
 				<div class="col-1 text-center">{{index+1}}</div>
 				<div class="col-3 text-center">{{restaurant.name}}</div>
 				<div class="col-3 text-center">{{restaurant.address}}</div>
-				<!-- <div class="col-4 text-center">{{restaurant.manager.firstName}} {{restaurant.manager.lastName}}</div> -->
+				<div class="col-4 text-center">{{restaurant.manager.firstName}} {{restaurant.manager.lastName}}</div>
 				<div class="col-1 flex-row justify-content-around">
-					<div class="cursor-pointer" @click="deleteRestaurant(restaurant.id)"><icon icon="trash"/></div>
+					<div class="cursor-pointer" @click="deleteRestaurant(restaurant.restaurantId)"><icon icon="trash"/></div>
 				</div>
 			</div>
 		</div>

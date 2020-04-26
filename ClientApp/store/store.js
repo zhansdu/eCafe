@@ -9,9 +9,13 @@ Vue.use(Vuex)
 // TYPES
 const MAIN_SET_COUNTER = 'MAIN_SET_COUNTER'
 
-
-export default new Vuex.Store({
-  state,
-  mutations,
-  actions
-})
+const store = new  Vuex.Store({
+	state,
+	mutations,
+	actions
+});
+store.subscribe((mutation, state) => {
+	var cache=JSON.stringify(state);
+	localStorage.setItem('store', cache);
+});
+export default store;

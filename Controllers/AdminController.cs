@@ -38,14 +38,18 @@ public class AdminController : Controller
     }
     //get restaurants
     [HttpGet("restaurants")]
-    public async Task<ActionResult<List<Restaurant>>> GetRestaurant()
+    public async Task<ActionResult<List<Restaurant>>> GetRestaurants()
     {
-        return Ok(await db.Restaurants.ToListAsync());
+        List<Restaurant> restaurants = await db.Restaurants.ToListAsync();
+        restaurants.ForEach(async (element) =>
+        {
+            element.Manager = await db.Managers.FindAsync(element.ManagerId);
+        });
+        return Ok(restaurants);
     }
     [HttpPost("restaurant")]
     public async Task AddRestaurant([FromBody]Restaurant restaurant)
     {
-        Console.WriteLine(restaurant.Manager.FirstName);
         await db.AddAsync(restaurant);
         await db.SaveChangesAsync();
     }
@@ -56,5 +60,10 @@ public class AdminController : Controller
         db.Restaurants.Remove(entity);
         await db.SaveChangesAsync();
         return Ok();
+    }
+    [HttpGet("clients")]
+    public async Task<ActionResult<List<Client>>> GetClients()
+    {
+        return Ok(await db.Clients.ToListAsync());
     }
 }

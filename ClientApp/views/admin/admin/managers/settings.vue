@@ -34,7 +34,8 @@ export default{
   data(){
     return{
       manager:{
-        role:"manager"
+        role:"manager",
+        adminId:this.$user.user().adminId
       }
     }
   },
@@ -49,7 +50,7 @@ export default{
 };
 </script>
 <style scoped>
-  input{
-    width: 100%;
-  }
+input{
+  width: 100%;
+}
 </style>

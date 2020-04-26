@@ -15,12 +15,7 @@ export default{
 	methods:{
 		login(){
 			this.$http.post('auth/login',{email:this.email,password:this.password}).then(response=>{
-				console.log(response);
-				var user=response.data;
-				this.$user.create(user);
-				this.$user.login();
-				console.log(this.$user);
-				console.log(this.$user.role());
+				this.$user.create(response.data);
 				if(this.$user.role()=="manager"){
 					this.goTo('admin.manager')
 				}

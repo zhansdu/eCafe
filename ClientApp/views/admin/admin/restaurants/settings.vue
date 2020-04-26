@@ -11,7 +11,7 @@
 						<input type="text" placeholder="Address" v-model="restaurant.address">
 					</div>
 					<div class="col-4">
-						<customSelect :options="managers.data" placeholder="Manager " v-model="restaurant.manager"/>
+						<customSelect :options="managers.data" str="managerId" placeholder="Manager" v-model="restaurant.managerId"/>
 					</div>
 				</div>
 				<div class="flex-row justify-content-center">
@@ -33,7 +33,8 @@ export default{
 	},
 	methods:{
 		confirm(){
-			console.log(this.restaurant)
+			console.log(this.restaurant);
+
 			this.$http.post('admin/restaurant',this.restaurant).then(response=>{
 				alert(response.statusText)
 			})

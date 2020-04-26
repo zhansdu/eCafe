@@ -8,12 +8,12 @@
 export default{
 	props:{
 		placeholder:String,
-		value:Object,
+		str:String,
 		options:Array
 	},
 	methods:{
 		handleClick(option){
-			this.$emit('input',option)
+			this.$emit('input',option[this.str] || option)
 		}
 	}
 };

@@ -10,24 +10,25 @@ import { FontAwesomeIcon } from './icons'
 Vue.component('icon', FontAwesomeIcon)
 
 class user{
-	constructor(){}
 	create(user){
-		this.user=user;
+		this.login(user);
 	}
-	login(){
+	login(user){
+		store.commit('setUser',user);
 		this.loggedIn=true;
 	}
 	authenticated(){
 		return this.loggedIn;
 	}
+	user(){
+		return store.state.user;
+	}
 	logout(){
+		store.commit('setUser',{});
 		this.loggedIn=false;
 	}
-	user(){
-		return this.user;
-	}
 	role(){
-		return this.user.role;
+		return this.user().role;
 	}
 }
 
@@ -36,16 +37,14 @@ Vue.prototype.$http = axios.create({
 	baseURL:'https://localhost:5001/api'
 });
 
-sync(store, router)
-
 const app = new Vue({
-  store,
-  router,
-  ...App
+	store,
+	router,
+	...App,
 })
 
 export {
-  app,
-  router,
-  store
+	app,
+	router,
+	store
 }
