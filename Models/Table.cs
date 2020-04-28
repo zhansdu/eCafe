@@ -5,8 +5,8 @@ namespace newProjectJs.Models
     {
         public int TableId { get; set; }
         public int Number { get; set; }
-        public Boolean Active { get; set; }
-        public int RestaurantId {get;set;}
+	    public int SeatsCount { get; set; }
+        public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }
     }
 }

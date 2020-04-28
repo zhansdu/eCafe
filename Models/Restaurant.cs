@@ -1,3 +1,4 @@
+using System;
 namespace newProjectJs.Models
 {
     public class Restaurant
@@ -7,5 +8,9 @@ namespace newProjectJs.Models
         public string Address { get; set; }
         public int ManagerId {get;set;}
         public Manager Manager { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

@@ -7,45 +7,47 @@ using newProjectJs.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Route("api/admin")]
-public class AdminController : Controller
+[Route("api/client")]
+public class ClientController : Controller
 {
     private readonly CafeContext db;
-    public AdminController(CafeContext db)
+    public ClientController(CafeContext db)
     {
         this.db = db;
     }
     //get
-    [HttpGet("managers")]
-    public async Task<ActionResult<List<Manager>>> Get()
+    [HttpGet("restaurants")]
+    public async Task<ActionResult<List<Restaurant>>> GetRestaurant()
     {
-        return Ok(await db.Managers.ToListAsync());
+        return Ok(await db.Restaurants.ToListAsync());
     }
-    //Create manager POST
-    [HttpPost("manager")]
-    public async Task<ActionResult> Post([FromBody]Manager manager)
+    [HttpGet("restaurant/{id}")]
+    public async Task<ActionResult<Restaurant>> GetRestaurant(string id)
     {
-        await db.Managers.AddAsync(manager);
-        await db.SaveChangesAsync();
-        return Ok();
+        Restaurant restauarnts = await db.Restaurants.FindAsync(int.Parse(id));
+        return Ok(restauarnts);
     }
-    //delete manager
-    [HttpDelete("manager/{id}")]
-    public async Task<ActionResult> DeleteManager(string id)
+    [HttpPost("food")]
+    public async Task<ActionResult<List<Food>>> GetFood()
     {
-        var manager = await db.Managers.FindAsync(int.Parse(id));
-        var restaurants = await db.Restaurants.Where((restaurant) => restaurant.ManagerId == manager.ManagerId).ToListAsync();
-        db.Managers.Remove(manager);
-        restaurants.ForEach((obj) => db.Restaurants.Remove(obj));
-        await db.SaveChangesAsync();
-        return Ok();
+        return Ok(await db.Food.ToListAsync());
     }
-    //get restaurants
+    //food by restaurant id
+    [HttpDelete("food/{id}")]
+    public async Task<ActionResult<List<Food>>> GetFoodByRestaurant(string id)
+    {
+        return Ok(await db.Food.Where((food) => food.RestaurantId == int.Parse(id)).ToListAsync());
+    }
+    //get available tables
     [HttpGet("restaurants")]
     public async Task<ActionResult<List<Restaurant>>> GetRestaurants()
     {
         List<Restaurant> restaurants = await db.Restaurants.ToListAsync();
-        restaurants.ForEach((obj) => obj.Manager = db.Managers.Find(obj.ManagerId));
+        async void action(Restaurant element)
+        {
+            element.Manager = await db.Managers.FindAsync(element.ManagerId);
+        }
+        restaurants.ForEach(action);
         return Ok(restaurants);
     }
     [HttpPost("restaurant")]

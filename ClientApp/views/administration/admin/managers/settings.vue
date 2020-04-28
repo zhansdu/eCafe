@@ -11,12 +11,12 @@
             <input type="text" placeholder="Surname" v-model="manager.lastName">
           </div>
           <div class="col-4">
-            <input type="text" placeholder="Phone number" v-model="manager.phoneNumber">
+            <input type="number" placeholder="Phone number" v-model="manager.phoneNumber">
           </div>
         </div>
         <div class="flex-row">
           <div class="col-12 col-md-6">
-            <input type="text" placeholder="Email" v-model="manager.email">
+            <input type="email" placeholder="Email" v-model="manager.email">
           </div>
           <div class="col-12 col-md-6">
             <input type="password" placeholder="Password" v-model="manager.password">
@@ -49,8 +49,3 @@ export default{
   }
 };
 </script>
-<style scoped>
-input{
-  width: 100%;
-}
-</style>

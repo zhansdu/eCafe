@@ -5,10 +5,16 @@ import about from '../views/user/about/main'
 import menu from '../views/user/menu/main'
 import map from '../views/user/map/main'
 
-import admin from '../views/admin/admin/admin'
-import adminRestaurants from '../views/admin/admin/restaurants/restaurants'
-import adminManagers from '../views/admin/admin/managers/managers'
-import adminClients from '../views/admin/admin/clients/clients'
+import admin from '../views/administration/admin/admin'
+import adminRestaurants from '../views/administration/admin/restaurants/restaurants'
+import adminManagers from '../views/administration/admin/managers/managers'
+import adminClients from '../views/administration/admin/clients/clients'
+
+import manager from '../views/administration/manager/welcome'
+import managerRouter from '../views/administration/manager/manager'
+import managerFood from '../views/administration/manager/food/food'
+import managerTables from '../views/administration/manager/tables/tables'
+import managerRestaurant from '../views/administration/manager/restaurant/restaurant'
 
 import login from '../views/login/main'
 
@@ -29,8 +35,8 @@ export const routes =
 	path:'/admin',
 	component:admin,
 	redirect:{name:'admin.restaurants'},
-	children:
-	[{
+	children:[
+	{
 		name:'admin.restaurants',
 		path:'restaurants',
 		component:adminRestaurants,
@@ -43,7 +49,7 @@ export const routes =
 		[{
 			name:'restaurants.dashboard',
 			path:'dashboard',
-			component:require('../views/admin/admin/restaurants/dashboard.vue').default,
+			component:require('../views/administration/admin/restaurants/dashboard.vue').default,
 			meta:{
 				display:'Dashboard'
 			}
@@ -51,7 +57,7 @@ export const routes =
 		{
 			name:'restaurants.settings',
 			path:'settings',
-			component:require('../views/admin/admin/restaurants/settings.vue').default,
+			component:require('../views/administration/admin/restaurants/settings.vue').default,
 			meta:{
 				display:'Settings'
 			}
@@ -70,7 +76,7 @@ export const routes =
 		[{
 			name:'managers.dashboard',
 			path:'dashboard',
-			component:require('../views/admin/admin/managers/dashboard.vue').default,
+			component:require('../views/administration/admin/managers/dashboard.vue').default,
 			meta:{
 				display:'Dashboard'
 			}
@@ -78,7 +84,7 @@ export const routes =
 		{
 			name:'managers.settings',
 			path:'settings',
-			component:require('../views/admin/admin/managers/settings.vue').default,
+			component:require('../views/administration/admin/managers/settings.vue').default,
 			meta:{
 				display:'Settings'
 			}
@@ -97,12 +103,102 @@ export const routes =
 		[{
 			name:'clients.dashboard',
 			path:'dashboard',
-			component:require('../views/admin/admin/clients/dashboard.vue').default,
+			component:require('../views/administration/admin/clients/dashboard.vue').default,
 			meta:{
 				display:'Dashboard'
 			}
 		}]
 
+	}]
+},
+{
+	name:'manager',
+	path:'/manager',
+	component:manager,
+	meta:{
+		display:"Restaurants"
+	}
+},
+{
+	name:'manager.router',
+	path:'/manager/edit',
+	component:managerRouter,
+	redirect:{name:'manager.food'},
+	children:
+	[{
+		name:'manager.food',
+		path:'food',
+		component:managerFood,
+		redirect:{name:'food.dashboard'},
+		meta:{
+			display:'Menu',
+			index:0
+		},
+		children:
+		[{
+			name:'food.dashboard',
+			path:'dashboard',
+			component:require('../views/administration/manager/food/dashboard.vue').default,
+			meta:{
+				display:'Dashboard'
+			}
+		},
+		{
+			name:'food.settings',
+			path:'settings',
+			component:require('../views/administration/manager/food/settings.vue').default,
+			props:true,
+			meta:{
+				display:'Settings'
+			}
+		}]
+	},
+	{
+		name:'manager.tables',
+		path:'tables',
+		component:managerTables,
+		redirect:{name:'tables.dashboard'},
+		meta:{
+			display:'Tables',
+			index:1
+		},
+		children:
+		[{
+			name:'tables.dashboard',
+			path:'dashboard',
+			component:require('../views/administration/manager/tables/dashboard.vue').default,
+			meta:{
+				display:'Dashboard'
+			}
+		},
+		{
+			name:'tables.settings',
+			path:'settings',
+			component:require('../views/administration/manager/tables/settings.vue').default,
+			meta:{
+				display:'Settings'
+			}
+		}]
+	},
+	{
+		name:'manager.restaurant',
+		path:'restaurant',
+		component:managerRestaurant,
+		redirect:{name:'restaurant.settings'},
+		meta:{
+			display:'Restaurant',
+			index:2
+		},
+		children:
+		[{
+			name:'restaurant.settings',
+			path:'settings',
+			component:require('../views/administration/manager/restaurant/settings.vue').default,
+			props:true,
+			meta:{
+				display:'Settings'
+			}
+		}]
 	}]
 },
 {

@@ -1,4 +1,5 @@
 const state={
-	user:{}
+	user:{},
+	editingRestaurant:{}
 }
 export default state;

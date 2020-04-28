@@ -81,3 +81,6 @@ html,body,#app{
 	margin:5px;
 	padding:3px;
 }
+input{
+  width: 100%;
+}

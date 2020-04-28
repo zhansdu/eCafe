@@ -6,6 +6,9 @@ const mutations={
 	},
 	setUser(state,data){
 		state.user=data;
+	},
+	setEditingRestaurant(state,data){
+		state.editingRestaurant=data;
 	}
 }
 export default mutations;
