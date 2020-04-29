@@ -4,7 +4,7 @@
 			<tr class="text-center">TABLES</tr>
 			<tr>
 				<td>Table number</td>
-				<td v-for="(time,index) in time" :key="index">{{time.getHours()}} : {{time.getMinutes()}}</td>
+				<td v-for="(time,index) in time" :key="index">{{time.getHours()}}</td>
 			</tr>
 			<tr v-for="(table,index) in tables" :key="index">
 				<td>{{table.number}}</td>

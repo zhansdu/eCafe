@@ -1,6 +1,8 @@
 import user from '../views/user/main'
 import userRestaurants from '../views/user/restaurant/main'
 import userRestaurant from '../views/user/restaurant/single'
+import store from '../store/store'
+
 import about from '../views/user/about/main'
 import menu from '../views/user/menu/main'
 import map from '../views/user/map/main'
@@ -16,13 +18,14 @@ import managerFood from '../views/administration/manager/food/food'
 import managerTables from '../views/administration/manager/tables/tables'
 import managerRestaurant from '../views/administration/manager/restaurant/restaurant'
 
-import login from '../views/login/main'
+import login from '../views/auth/login'
+import register from '../views/auth/register'
 
 
 export const routes = 
 [{
 	name:'login',
-	path:'/',
+	path:'/login',
 	component:login
 },
 {
@@ -34,7 +37,6 @@ export const routes =
 	name:'admin',
 	path:'/admin',
 	component:admin,
-	redirect:{name:'admin.restaurants'},
 	children:[
 	{
 		name:'admin.restaurants',
@@ -109,7 +111,15 @@ export const routes =
 			}
 		}]
 
-	}]
+	}],
+	beforeEnter:(to,from,next)=>{
+		if(!store.state.user.role=='admin'){
+			next(false);
+		}
+		else{
+			next({name:'admin.restaurants'});
+		}
+	}
 },
 {
 	name:'manager',
@@ -117,6 +127,14 @@ export const routes =
 	component:manager,
 	meta:{
 		display:"Restaurants"
+	},
+	beforeEnter:(to,from,next)=>{
+		if(store.state.user.role!='manager'){
+			next(false);
+		}
+		else{
+			next();
+		}	
 	}
 },
 {
@@ -199,16 +217,24 @@ export const routes =
 				display:'Settings'
 			}
 		}]
-	}]
+	}],
+	beforeEnter:(to,from,next)=>{
+		if(store.state.user.role!='manager'){
+			next(false);
+		}
+		else{
+			next();
+		}
+	}
 },
 {
-	name:'user',
-	path:'/user/',
+	name:'client',
+	path:'/',
 	component:user,
 	redirect:{name:'about'},
-	children:[
-	{
-		name:'user.restaurant',
+	children:
+	[{
+		name:'client.restaurant',
 		path:'restaurant',
 		component:userRestaurant
 	},
@@ -232,7 +258,7 @@ export const routes =
 
 	},
 	{
-		name:'user.restaurants',
+		name:'client.restaurants',
 		path:'restaurants',
 		component:userRestaurants,
 		meta:{
@@ -248,6 +274,10 @@ export const routes =
 			display:'Map',
 			icon:'globe'
 		},
-	}
-	]
+	}]
+},
+{
+	name:'register',
+	path:'/register',
+	component:register
 }]

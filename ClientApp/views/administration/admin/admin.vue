@@ -5,18 +5,17 @@
 				<div class="cursor-pointer ml-2 pl-3 p-1 mb-2 pilled" v-for="route in routes[2].children" @click="goTo(route.name);index=route.meta.index">{{route.meta.display}}</div>
 			</div>
 		</div>
-		<div class="main">
+		<div id="main">
 			<div id="navbar">
 				<div class="flex-row justify-content-between borderBottom h-100 x13">
 					<div class="flex-row ml-2">
-						<div class="x15 mr-4 pb-1 cursor-pointer"><span>&#9776;</span></div>
+						<toggler />
 						<div class="w-100 flex-row align-items-center justify-content-around">
 							<div class="cursor-pointer mr-2" v-for="route in routes[2].children[index].children" @click="goTo(route.name)" style="color:grey !important;">{{route.meta.display}}</div>
 						</div>
 					</div>
 					<div class="flex-row mr-4">
-						<div><icon icon="bell"></icon></div>
-						<div class="ml-3"><icon icon="comment-dots"></icon></div>
+						<dropdown />
 					</div>
 				</div>
 			</div>
@@ -27,8 +26,11 @@
 <script type="text/javascript">
 import {routes} from '../../../router/routes'
 import goTo from '../../../mixins/goTo'
+import toggler from '../../../components/toggler'
+import dropdown from '../../../components/dropdown'
 export default{
 	mixins:[goTo],
+	components:{toggler,dropdown},
 	data(){
 		return{
 			routes,

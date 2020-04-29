@@ -10,6 +10,9 @@ html{
 html,body,#app{
 	height: 100%;
 }
+#main{
+	width:100%;
+}
 .cursor-pointer,.cursor-pointer *{
 	cursor: pointer;
 }
@@ -41,8 +44,12 @@ html,body,#app{
 .half-weight{
 	height:50%;
 }
+#sidebar,#main,.pilled{
+	transition: all .3s;
+}
 #sidebar{
 	position: fixed;
+	overflow: hidden;
 }
 #sidebar,#sidebarImage{
 	width:20vw;
@@ -83,4 +90,8 @@ html,body,#app{
 }
 input{
   width: 100%;
+  border-color:transparent;
+}
+textarea{
+	width: 100%;
 }

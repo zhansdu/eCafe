@@ -1,14 +1,11 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using newProjectJs.Data;
 using newProjectJs.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 [Route("api/manager")]
 public class ManagerController : Controller
 {
@@ -25,14 +22,8 @@ public class ManagerController : Controller
         return Ok(restaurants);
     }
     [HttpPut("restaurant")]
-    public async Task<ActionResult> EditRestaurant([FromBody] Restaurant restaurant,[FromBody]IFormFile file)
+    public async Task<ActionResult> EditRestaurant([FromBody]Restaurant restaurant)
     {
-        var filePath = Path.Combine(@"/home/zhan/Desktop/lessons/eCafe/newProjectJs/wwwroot/static", Path.GetRandomFileName());
-
-            using (var stream = System.IO.File.Create(filePath))
-            {
-                await file.CopyToAsync(stream);
-            }
         db.Update(restaurant);
 
         await db.SaveChangesAsync();

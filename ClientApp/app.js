@@ -10,9 +10,6 @@ import { FontAwesomeIcon } from './icons'
 Vue.component('icon', FontAwesomeIcon)
 
 class user{
-	create(user){
-		this.login(user);
-	}
 	login(user){
 		store.commit('setUser',user);
 		this.loggedIn=true;
@@ -24,7 +21,7 @@ class user{
 		return store.state.user;
 	}
 	logout(){
-		store.commit('setUser',{});
+		store.commit('clearStore');
 		this.loggedIn=false;
 	}
 	role(){

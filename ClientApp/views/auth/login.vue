@@ -4,7 +4,8 @@
 			<div class="mt-5 x15">LogIN e<span style="color:green">Cafe</span></div>
 			<div class="mt-3 mb-3"><input type="email" placeholder="Email :" v-model="email"></div>
 			<div class="mb-3"><input type="password" placeholder="Password :" v-model="password"></div>
-			<button class="mb-5 btn btn-outline-primary" @click="login">Confirm</button>
+			<button class="mb-3 btn btn-outline-primary" @click="login">Confirm</button>
+			<div class="mb-5">Or <router-link :to="{ name: 'register'}"> Register</router-link></div>
 		</div>
 	</div>
 </template>
@@ -12,13 +13,17 @@
 import goTo from '../../mixins/goTo'
 export default{
 	mixins:[goTo],
+	data(){
+		return{
+			email:null,
+			password:null
+		}
+	},
 	methods:{
 		login(){
-			this.$http.post('auth/login',{email:this.email,password:this.password}).then(response=>{
-				this.$user.create(response.data);
-				if(this.$user.role()=="manager"){
-					this.goTo('admin.manager')
-				}
+			var auth={email:this.email,password:this.password}
+			this.$http.post('auth/login',auth).then(response=>{
+				this.$user.login(response.data);
 				this.goTo(this.$user.role());
 			})
 		}

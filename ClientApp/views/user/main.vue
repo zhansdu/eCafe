@@ -2,7 +2,7 @@
 	<div class="flex-row position-relative h-100">
 		<div id="sidebar" class="flex-column">
 			<div class="mt-5">
-				<div v-for="(route,index) in routes[3].children.slice(1)" :key="index" class="flex-row mt-2 ml-2 pt-2 pl-2 align-items-center cursor-pointer" @click="goTo(route.name)">
+				<div v-for="(route,index) in routes[5].children.slice(1)" :key="index" class="flex-row mt-2 ml-2 pt-2 pl-2 align-items-center cursor-pointer" @click="goTo(route.name)">
 					<div style="width:20px;"><icon :icon="route.meta.icon"></icon></div>
 					<div class="ml-2">{{route.meta.display}}</div>
 				</div>
@@ -33,8 +33,7 @@
 					</div>
 				</div>
 				<div class="flex-row">
-					<div><icon icon="bell"></icon></div>
-					<div class="ml-3"><icon icon="comment-dots"></icon></div>
+					<dropdown />
 				</div>
 			</div>
 			<router-view></router-view>
@@ -45,18 +44,16 @@
 import {routes} from '../../router/routes'
 import customSelect from '../../components/customSelect'
 import goTo from '../../mixins/goTo'
+import dropdown from '../../components/dropdown'
 export default{
 	mixins:[goTo],
-	components:{
-		customSelect
-	},
+	components:{customSelect,dropdown},
 	data(){
 		return{
 			routes
 		}
 	},
 	created(){
-		this.$http.get('food').then(response=>{console.log(response)});
 	}
 };
 </script>

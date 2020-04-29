@@ -14,6 +14,11 @@
 						<input type="number" placeholder="Price" v-model="food.price">
 					</div>
 				</div>
+				<div class="flex-row">
+					<div class="col-12">
+						<textarea placeholder="Description" v-model="food.description"></textarea>
+					</div>
+				</div>
 				<div class="flex-row justify-content-center">
 					<button class="purple-button" @click="confirm()">{{this.edit ? 'Edit':'Add'}}</button>
 				</div>

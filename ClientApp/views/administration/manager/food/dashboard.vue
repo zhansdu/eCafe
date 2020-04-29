@@ -37,7 +37,6 @@ export default{
 		getMenu(){
 			this.$http.get('manager/food/'+this.$store.state.editingRestaurant.restaurantId).then(response=>{
 				this.menu=response.data;
-				console.log(response);
 			});
 		},
 		editFood(food){

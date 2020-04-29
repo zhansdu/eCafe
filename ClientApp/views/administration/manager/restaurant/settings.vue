@@ -9,7 +9,7 @@
 						<input type="text" v-model="restaurant.name"/>
 					</div>
 					<div class="col-3">
-						<label style="float:left">Work start time</label>
+						<label >Work start time</label>
 						<input type="time" v-model="time.start">
 					</div>
 					<div class="col-3">
@@ -18,13 +18,9 @@
 					</div>
 				</div>
 				<div class="flex-row">
-					<div class="col-6">
+					<div class="col-12">
 						<label>Description</label>
 						<textarea placeholder="Description" v-model="restaurant.description"/>
-					</div>
-					<div class="col-6">
-						<label>Image</label>
-						<input type="file" placeholder="Image" @change="changeFile">
 					</div>
 				</div>
 				<div class="flex-row justify-content-center">
@@ -43,7 +39,6 @@ export default{
 				start:{},
 				end:{}
 			},
-			file:{}
 		}
 	},
 	methods:{
@@ -62,7 +57,7 @@ export default{
 			this.restaurant.startTime=start;
 			this.restaurant.endTime=end;
 
-			this.$http.put('manager/restaurant',this.restaurant,this.file).then(response=>{
+			this.$http.put('manager/restaurant',this.restaurant).then(response=>{
 				alert(response.statusText);
 				this.$store.commit('setEditingRestaurant',this.restaurant);
 			})
@@ -71,9 +66,6 @@ export default{
 };
 </script>
 <style scoped>
-textarea{
-	width: 100%;
-}
 label{
 	width: 100%;
 	display: flex;

@@ -49,5 +49,10 @@ namespace newProjectJs.Controllers
                 }
             }
         }
+        [HttpPost("register")]
+        public async Task Register([FromBody]Client user){
+            await db.Clients.AddAsync(user);
+            await db.SaveChangesAsync();
+        }
     }
 }

@@ -14,7 +14,7 @@
 							<div>Avarage income:none</div>
 						</div>
 					</div>
-					<button class="button align-self-center text-center cursor-pointer" @click="goTo('restourant')">More</button>
+					<button class="button align-self-center text-center cursor-pointer" @click="goTo('client.restaurant')">More</button>
 				</div>
 			</div>
 		</div>
