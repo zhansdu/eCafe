@@ -8,10 +8,10 @@
 						<input type="text" placeholder="Name" v-model="restaurant.name"/>
 					</div>
 					<div class="col-4">
-						<input type="text" placeholder="Address" v-model="restaurant.address">
+						<customSelect :options="cities.data" strValue="cityId" placeholder="Cities" v-model="restaurant.cityId"/>
 					</div>
 					<div class="col-4">
-						<customSelect :options="managers.data" str="managerId" placeholder="Manager" v-model="restaurant.managerId"/>
+						<customSelect :options="managers.data" strValue="managerId" placeholder="Manager" v-model="restaurant.managerId"/>
 					</div>
 				</div>
 				<div class="flex-row justify-content-center">
@@ -28,7 +28,8 @@ export default{
 	data(){
 		return{
 			restaurant:{},
-			managers:[]
+			managers:[],
+			cities:[]
 		}
 	},
 	methods:{
@@ -44,6 +45,10 @@ export default{
 		this.managers=await this.$http.get('admin/managers');
 		this.managers.data.forEach(element=>{
 			element.label=element.firstName+' '+element.lastName;
+		})
+		this.cities=await this.$http.get('admin/cities');
+		this.cities.data.forEach(element=>{
+			element.label=element.name;
 		})
 	}
 };

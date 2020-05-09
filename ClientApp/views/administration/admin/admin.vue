@@ -2,7 +2,7 @@
 	<div class="flex-row">
 		<div id="sidebar">
 			<div class="flex-column" style="margin-top:100px;">
-				<div class="cursor-pointer ml-2 pl-3 p-1 mb-2 pilled" v-for="route in routes[2].children" @click="goTo(route.name);index=route.meta.index">{{route.meta.display}}</div>
+				<div class="cursor-pointer ml-2 pl-3 p-1 mb-2 pilled" v-for="route in routes[0].children" @click="goTo(route.name);index=route.meta.index">{{route.meta.display}}</div>
 			</div>
 		</div>
 		<div id="main">
@@ -11,7 +11,7 @@
 					<div class="flex-row ml-2">
 						<toggler />
 						<div class="w-100 flex-row align-items-center justify-content-around">
-							<div class="cursor-pointer mr-2" v-for="route in routes[2].children[index].children" @click="goTo(route.name)" style="color:grey !important;">{{route.meta.display}}</div>
+							<div class="cursor-pointer mr-2" v-for="route in routes[0].children[index].children" @click="goTo(route.name)" style="color:grey !important;">{{route.meta.display}}</div>
 						</div>
 					</div>
 					<div class="flex-row mr-4">
@@ -36,32 +36,19 @@ export default{
 			routes,
 			index:0
 		}
-	},
-	created(){
 	}
 };
 </script>
 <style scoped>
-.main{
-	width:80vw;
-}
-#sidebar{
-	background: #5A6D8A;
-	height: 100vh;
-}
-#sidebar,#navbar{
-	position: sticky;
-	top:0;
-}
-#navbar{
-	display: flex;
-	flex-direction: column;
-	width:100%;
-	z-index: 2;
-	background-color: white;
-}
 #navbar > div{
 	align-items:  center;
+}
+#navbar{
+	height:9.5vh;
+	min-height: 50px;
+}
+#sidebar{
+	background:#5A6D8A;
 }
 .pilled{
 	background-color:rgba(0,0,0,0.4);

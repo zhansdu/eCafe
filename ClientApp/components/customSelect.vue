@@ -1,6 +1,6 @@
 <template>
 	<select>
-		<option disabled selected class="d-none" v-if="placeholder">{{placeholder}}</option>
+		<option disabled selected class="d-none" v-if="placeholder">{{place}}</option>
 		<option v-for="(option,index) in options" :key="index" @click="handleClick(option)">{{option.label}}</option>
 	</select>
 </template>
@@ -8,12 +8,27 @@
 export default{
 	props:{
 		placeholder:String,
-		str:String,
-		options:Array
+		strValue:String,
+		options:Array,
+		onChange:Function,
+		value:Object
+	},
+	computed:{
+		place(){
+			if(this.value!=null){
+				return this.value.label
+			}
+			else{
+				return this.placeholder
+			}
+		}
 	},
 	methods:{
 		handleClick(option){
-			this.$emit('input',option[this.str] || option)
+			this.$emit('input',option[this.strValue] || option)
+			if(this.onChange!=null){
+				this.onChange();
+			}
 		}
 	}
 };
@@ -21,5 +36,6 @@ export default{
 <style scoped>
 select{
 	padding:2.5px;
+	width:100%;
 }
 </style>

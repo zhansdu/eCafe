@@ -15,58 +15,56 @@ public class ClientController : Controller
     {
         this.db = db;
     }
-    //get
+    // get all restaurants
     [HttpGet("restaurants")]
-    public async Task<ActionResult<List<Restaurant>>> GetRestaurant()
+    public async Task<ActionResult<List<Restaurant>>> GetRestaurants()
     {
         return Ok(await db.Restaurants.ToListAsync());
     }
+    //get by city restaurants
+    [HttpGet("restaurants/{id}")]
+    public async Task<ActionResult<List<Restaurant>>> GetRestaurantByCity(string id)
+    {
+        List<Restaurant> restaurants=await db.Restaurants.Where((arg)=>arg.CityId==int.Parse(id)).ToListAsync();
+        return Ok(restaurants);
+    }
+    //get restaurant by id
     [HttpGet("restaurant/{id}")]
-    public async Task<ActionResult<Restaurant>> GetRestaurant(string id)
+    public async Task<ActionResult<Restaurant>> GetRestaurantById(string id)
     {
         Restaurant restauarnts = await db.Restaurants.FindAsync(int.Parse(id));
         return Ok(restauarnts);
     }
-    [HttpPost("food")]
-    public async Task<ActionResult<List<Food>>> GetFood()
+    //get food by city
+    [HttpGet("food/city/{id}")]
+    public async Task<ActionResult<List<Food>>> GetFoodByCity(string id)
     {
-        return Ok(await db.Food.ToListAsync());
+        List<Food> food = await db.Food.Where((arg) => arg.CityId == int.Parse(id)).ToListAsync();
+        return Ok(food);
     }
     //food by restaurant id
-    [HttpDelete("food/{id}")]
+    [HttpGet("food/restaurant/{id}")]
     public async Task<ActionResult<List<Food>>> GetFoodByRestaurant(string id)
     {
-        return Ok(await db.Food.Where((food) => food.RestaurantId == int.Parse(id)).ToListAsync());
+        List<Food> menu = await db.Food.Where((food) => food.RestaurantId == int.Parse(id)).ToListAsync();
+        return Ok(menu);
     }
     //get available tables
-    [HttpGet("restaurants")]
-    public async Task<ActionResult<List<Restaurant>>> GetRestaurants()
+    [HttpGet("tables/{id}")]
+    public async Task<ActionResult<List<Table>>> GetTables(string id)
     {
-        List<Restaurant> restaurants = await db.Restaurants.ToListAsync();
-        async void action(Restaurant element)
-        {
-            element.Manager = await db.Managers.FindAsync(element.ManagerId);
-        }
-        restaurants.ForEach(action);
-        return Ok(restaurants);
+        List<Table> tables= await db.Tables.Where((table)=>table.RestaurantId==int.Parse(id)).ToListAsync();
+        return Ok(tables);
     }
-    [HttpPost("restaurant")]
-    public async Task AddRestaurant([FromBody]Restaurant restaurant)
+    [HttpPost("orders/{id}")]
+    public async Task<ActionResult<List<Order>>> GetOrders(string id,[FromBody]DateTime time)
     {
-        await db.Restaurants.AddAsync(restaurant);
-        await db.SaveChangesAsync();
+        List<Order> orders= await db.Orders.Where((order)=>(order.RestaurantId==int.Parse(id))&&(order.StartTime.Date==time.Date)).ToListAsync();
+        return Ok(orders);
     }
-    [HttpDelete("restaurant/{id}")]
-    public async Task<ActionResult> DeleteRestaurant(string id)
+    [HttpGet("cities")]
+    public async Task<ActionResult<List<City>>> GetCities()
     {
-        var entity = await db.Restaurants.FindAsync(Int32.Parse(id));
-        db.Restaurants.Remove(entity);
-        await db.SaveChangesAsync();
-        return Ok();
-    }
-    [HttpGet("clients")]
-    public async Task<ActionResult<List<Client>>> GetClients()
-    {
-        return Ok(await db.Clients.ToListAsync());
+        return Ok(await db.Cities.ToListAsync());
     }
 }

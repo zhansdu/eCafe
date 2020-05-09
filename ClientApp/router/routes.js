@@ -1,11 +1,11 @@
-import user from '../views/user/main'
+import store from '../store/store'
+
+import user from '../views/user/user'
 import userRestaurants from '../views/user/restaurant/main'
 import userRestaurant from '../views/user/restaurant/single'
-import store from '../store/store'
 
 import about from '../views/user/about/main'
 import menu from '../views/user/menu/main'
-import map from '../views/user/map/main'
 
 import admin from '../views/administration/admin/admin'
 import adminRestaurants from '../views/administration/admin/restaurants/restaurants'
@@ -20,23 +20,22 @@ import managerRestaurant from '../views/administration/manager/restaurant/restau
 
 import login from '../views/auth/login'
 import register from '../views/auth/register'
-
+import error from '../views/shared/error'
 
 export const routes = 
 [{
-	name:'login',
-	path:'/login',
-	component:login
-},
-{
-	name:'mistake',
-	path:'/mistake',
-	component:login
-},
-{
 	name:'admin',
 	path:'/admin',
 	component:admin,
+	beforeEnter:(to,from,next)=>{
+		store.commit('initializeStore');
+		if(store.state.user.role!='admin'){
+			next({name:'error'});
+		}
+		else{
+			next();
+		}
+	},
 	children:[
 	{
 		name:'admin.restaurants',
@@ -111,15 +110,7 @@ export const routes =
 			}
 		}]
 
-	}],
-	beforeEnter:(to,from,next)=>{
-		if(!store.state.user.role=='admin'){
-			next(false);
-		}
-		else{
-			next({name:'admin.restaurants'});
-		}
-	}
+	}]
 },
 {
 	name:'manager',
@@ -129,18 +120,28 @@ export const routes =
 		display:"Restaurants"
 	},
 	beforeEnter:(to,from,next)=>{
+		store.commit('initializeStore');
 		if(store.state.user.role!='manager'){
-			next(false);
+			next({name:'error'});
 		}
 		else{
 			next();
-		}	
-	}
+		}
+	},
 },
 {
 	name:'manager.router',
 	path:'/manager/edit',
 	component:managerRouter,
+	beforeEnter:(to,from,next)=>{
+		store.commit('initializeStore');
+		if(store.state.user.role!='manager'){
+			next({name:'error'});
+		}
+		else{
+			next();
+		}
+	},
 	redirect:{name:'manager.food'},
 	children:
 	[{
@@ -217,26 +218,28 @@ export const routes =
 				display:'Settings'
 			}
 		}]
-	}],
-	beforeEnter:(to,from,next)=>{
-		if(store.state.user.role!='manager'){
-			next(false);
-		}
-		else{
-			next();
-		}
-	}
+	}]
 },
 {
 	name:'client',
 	path:'/',
 	component:user,
 	redirect:{name:'about'},
+	beforeEnter:(to,from,next)=>{
+		store.commit('initializeStore');
+		if(store.state.user.role=='admin' || store.state.user.role=='manager'){
+			next({name:'login'});
+		}
+		else{
+			next();
+		}
+	},
 	children:
 	[{
 		name:'client.restaurant',
 		path:'restaurant',
-		component:userRestaurant
+		component:userRestaurant,
+		props:true
 	},
 	{
 		name:'about',
@@ -265,19 +268,21 @@ export const routes =
 			display:'Restaurants',
 			icon:'glass-cheers'
 		},
-	},
-	{
-		name:'map',
-		path:'map',
-		component:map,
-		meta:{
-			display:'Map',
-			icon:'globe'
-		},
 	}]
 },
 {
 	name:'register',
 	path:'/register',
 	component:register
-}]
+},
+{
+	name:'login',
+	path:'/login',
+	component:login
+},
+{
+	name:'error',
+	path:'*',
+	component:error
+}
+]

@@ -3,8 +3,10 @@
 		<button class="btn dropdown-toggle" @click="toggle=!toggle">Profile<span class="caret"></span></button>
 		<ul class="dropdown-menu dropdown-menu-right cursor-pointer" v-if="toggle">
 			<li class="dropdown-item" @click="goTo('profile')">Account</li>
+			<li class="dropdown-divider" />
 			<li class="dropdown-item" @click="logout" v-if="$user.authenticated()">Logout</li>
 			<li class="dropdown-item" @click="goTo('login')" v-else>Login</li>
+			<li class="dropdown-item" @click="goTo('register')" >Register</li>
 		</ul>
 	</div>	
 </template>

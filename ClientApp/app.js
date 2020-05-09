@@ -12,17 +12,15 @@ Vue.component('icon', FontAwesomeIcon)
 class user{
 	login(user){
 		store.commit('setUser',user);
-		this.loggedIn=true;
 	}
 	authenticated(){
-		return this.loggedIn;
+		return Object.keys(store.state.user).length!=0;
 	}
 	user(){
 		return store.state.user;
 	}
 	logout(){
 		store.commit('clearStore');
-		this.loggedIn=false;
 	}
 	role(){
 		return this.user().role;
@@ -33,6 +31,12 @@ Vue.prototype.$user=new user();
 Vue.prototype.$http = axios.create({
 	baseURL:'https://localhost:5001/api'
 });
+
+Number.prototype.pad = function(size) {
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
+}
 
 const app = new Vue({
 	store,

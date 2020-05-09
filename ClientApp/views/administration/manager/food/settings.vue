@@ -34,7 +34,8 @@ export default{
 	data(){
 		return{
 			food:this.edit || {
-				restaurantId:this.$store.state.editingRestaurant.restaurantId
+				restaurantId:this.$store.state.editingRestaurant.restaurantId,
+				cityId:this.$store.state.editingRestaurant.cityId
 			}
 		}
 	},

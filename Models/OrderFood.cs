@@ -7,5 +7,4 @@ namespace newProjectJs.Models
 		public int FoodId{get;set;}
 		public Food Food;
 	}
-
 }

@@ -1,5 +1,7 @@
 const state={
 	user:{},
-	editingRestaurant:{}
+	editingRestaurant:{},
+	city:{},
+	food:[]
 }
 export default state;

@@ -45,7 +45,7 @@ public class AdminController : Controller
     public async Task<ActionResult<List<Restaurant>>> GetRestaurants()
     {
         List<Restaurant> restaurants = await db.Restaurants.ToListAsync();
-        restaurants.ForEach((obj) => obj.Manager = db.Managers.Find(obj.ManagerId));
+        restaurants.ForEach((obj) => { obj.Manager = db.Managers.Find(obj.ManagerId);obj.City = db.Cities.Find(obj.CityId); });
         return Ok(restaurants);
     }
     [HttpPost("restaurant")]
@@ -66,5 +66,10 @@ public class AdminController : Controller
     public async Task<ActionResult<List<Client>>> GetClients()
     {
         return Ok(await db.Clients.ToListAsync());
+    }
+    [HttpGet("cities")]
+    public async Task<ActionResult<List<City>>> GetCities()
+    {
+        return Ok(await db.Cities.ToListAsync());
     }
 }

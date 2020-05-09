@@ -18,5 +18,6 @@ namespace newProjectJs.Data
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<OrderFood> OrderFood { get; set; }
+        public DbSet<City> Cities { get; set; }
     }
 }

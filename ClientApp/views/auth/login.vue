@@ -1,9 +1,9 @@
 <template>
 	<div class="d-flex justify-content-center align-items-center h-100" style="background-color:black">
 		<div class="flex-column align-items-center login">
-			<div class="mt-5 x15">LogIN e<span style="color:green">Cafe</span></div>
-			<div class="mt-3 mb-3"><input type="email" placeholder="Email :" v-model="email"></div>
-			<div class="mb-3"><input type="password" placeholder="Password :" v-model="password"></div>
+			<div class="mt-5 mb-3 x15">LogIN e<span style="color:green">Cafe</span></div>
+			<div class="mb-3"><input type="email" placeholder="Email" v-model="email"></div>
+			<div class="mb-3"><input type="password" placeholder="Password" v-model="password"></div>
 			<button class="mb-3 btn btn-outline-primary" @click="login">Confirm</button>
 			<div class="mb-5">Or <router-link :to="{ name: 'register'}"> Register</router-link></div>
 		</div>
@@ -23,8 +23,13 @@ export default{
 		login(){
 			var auth={email:this.email,password:this.password}
 			this.$http.post('auth/login',auth).then(response=>{
-				this.$user.login(response.data);
-				this.goTo(this.$user.role());
+				if(response.data=="not found"){
+					alert(response.data);
+				}
+				else{
+					this.$user.login(response.data);
+					this.goTo(this.$user.role());
+				}
 			})
 		}
 	}

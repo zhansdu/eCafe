@@ -1,7 +1,11 @@
 const mutations={
 	clearStore(state){
 		Object.keys(state).forEach(key => {
-			state[key] = {}
+			if(Array.isArray(state[key])){
+				state[key]=[]
+			}else{
+				state[key] = {}
+			}
 		})
 	},
 	initializeStore(state){
@@ -14,6 +18,16 @@ const mutations={
 	},
 	setEditingRestaurant(state,data){
 		state.editingRestaurant=data;
+	},
+	setCity(state,data){
+		state.city=data;
+	},
+	addFood(state,data){
+		console.log(state.food);
+		state.food.push(data);
+	},
+	removeFood(state,index){
+		state.food.splice(index,1);
 	}
 }
 export default mutations;

@@ -5,7 +5,7 @@
 </template>
 <script type="text/javascript">
 export default{
-	beforeCreate() {
+	beforeRouteEnter(to,from,next) {
 		this.$store.commit('initializeStore');
 	}
 };

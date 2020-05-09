@@ -44,7 +44,7 @@ namespace newProjectJs.Controllers
                         }
                     }
                     catch(Exception g){
-                        return NotFound();
+                        return Ok("not found");
                     }
                 }
             }

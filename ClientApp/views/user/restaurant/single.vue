@@ -1,90 +1,232 @@
 <template>
-	<div class="flex-column">
-		<div class="bgPurple">
-			<img src="../../../assets/images/stoliki.png" class="image" />
-			<div class="grid">
+	<div>
+		<div id="restaurant" class="flex-column" >
+			<div class="grid bgPurple">
 				<div class="flex-column align-items-center text-center">
 					<div><icon icon="home" class="x15"/></div>
 					<div class="x15">Адресс</div>
-					<div class="x08">г. Шымкент пр. Тауке хана 121,</div>
-					<div class="x08">угол ул.Жолдасбекова 24</div>
+					<div class="x08">{{restaurant.address}}</div>
 				</div>
 				<div class="flex-column align-items-center text-center">
 					<div><icon icon="phone-square" class="x15"/></div>
 					<div class="x15">Контакты</div>
-					<div class="x08">+7 7252 54-97-70</div>
-					<div class="x08">+7 707 747-11-10</div>
+					<div class="x08">{{restaurant.contacts}}</div>
 				</div>
 				<div class="flex-column align-items-center text-center">
-					<div><icon icon="comment-dots" class="x15"/></div>
+					<div><icon class="cursor-pointer x15" icon="comment-dots" @click="scrollTo('tables')"/></div>
 					<div class="x15">Столики</div>
 					<div class="x08">Online оформление заявки </div>
 					<div class="x08">на проведение мероприятия</div>
 				</div>
+			</div>
+			<div class="backgroundImage flex-column justify-content-center" :style="'background-image:url('+restaurant.image+');'">
+				<div class="half-width flex-column align-items-center ml-auto" style="height:80%;">
+					<div class="innerDiv flex-column p-3">
+						<div>{{restaurant.name}}</div>
+						<div>{{restaurant.bigDescription}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="grid bgPurple">
 				<div class="flex-column align-items-center text-center">
-					<div><icon icon="shopping-basket"class="x15"/></div>
-					<div class="x15">Доставка</div>
-					<div class="x08">Служба доставки Ак-сарай </div>
-					<div class="x08">+7 701 900-11-10</div>
+					<div><icon icon="clock" class="x15"/></div>
+					<div class="x15">Время работы</div>
+					<div class="x08"> Пн-Вс - с {{timeToString(restaurant.startTime,true)}} до {{timeToString(restaurant.endTime,true)}}</div>
+				</div>
+				<div class="flex-column align-items-center text-center">
+					<div><icon icon="tags" class="x15"/></div>
+					<div class="x15">Средний чек</div>
+					<div class="x08">{{restaurant.avarageMoney}}</div>
+				</div>
+				<div class="flex-column align-items-center text-center">
+					<div><icon icon="utensils" class="x15"/></div>
+					<div class="x15">Кухня</div>
+					<div class="x08">{{restaurant.kitchen}}</div>
 				</div>
 			</div>
 		</div>
-		<div class="flex-column align-items-center text-center">
-			<div>Ak sarai</div>
-			<div class="line"></div>
-			<div class="x08">
-				 Еще один колоритный ресторан узбекской кухни из семейства «Meyram Group». Большой, роскошный и яркий, как будто сохранившийся в веках величественный дворец. Оказавшись здесь, несложно почувствовать себя султаном на дворцовом пире с его цветистой восточной роскошью и яркими красками.<br><br> Ресторан подходит для любого случая и повода. Вы можете уединиться небольшой компанией на балконе, отпраздновать шумное и веселое торжество в банкетном зале, посидеть на топчанах, наслаждаясь вкусом наших блюд и неповторимой аурой эмирских дворцов Средней Азии.<br><br> Блюда, подаваемые к дастархану, под стать богатству убранства дворца. Вся щедрость узбекской кухни с ее отборным мясом, специями, несколькими сортами шашлыка, самсы, лепешек.Блюда Ташкента, Ферганы, Хивы, Бухары и других регионов Узбекистана - настоящее гастрономическое путешествие! Блюда, готовящиеся на открытом огне, наполняющие пространство пряными ароматами специй. Десятки видов салатов, закусок, горячих блюд, 17 видов шашлыка! Не уйдут недовольными и стойкие приверженцы европейской кухни, для них, как и для других требовательных гурманов, есть специальный раздел меню «Кухня народов мира». Над несколькими видами плова колдуют ошпазы из Ташкента, Андижана, Ферганы. <br><br>Еще одна особенность «Ак-Сарая» - сервис в духе восточного гостеприимства. Вы можете смело привозить своих гостей, приехавших из других городов или стран. Коллектив «Ак-Сарая» абсолютно уверен, что это посещение станет одним из самых незабываемых впечатлений от поездки в Южный Казахстан.
+		<div class="w-100" v-if="$user.authenticated()">
+			<div class="p-2 flex-column align-items-center" id="tables">
+				<table class="table">
+					<tr class="text-center">TABLES</tr>
+					<tr>
+						<td>Table / Time</td>
+						<td v-for="(time,index) in times" :key="index">{{timeToString(time.time,false)}}</td>
+					</tr>
+					<tr v-for="(table,index) in orderTimes" :key="index">
+						<td>#{{table.table.number}} / {{table.table.seatsCount}} seats</td>
+						<td class="cursor-pointer" v-for="(time,index) in table.times" :key="index" :class="time.active ? 'active' : 'free'" @click="setOrderTime(table,time)">
+						</td>
+					</tr>
+				</table>
 			</div>
-		</div>
-		<div class="grid bgPurple">
-			<div class="flex-column align-items-center text-center">
-				<div><icon icon="clock" class="x15"/></div>
-				<div class="x15">Время работы</div>
-				<div class="x08"> Пн-Вс - с 09:00 до 00:30</div>
-			</div>
-			<div class="flex-column align-items-center text-center">
-				<div><icon icon="tags" class="x15"/></div>
-				<div class="x15">Средний чек</div>
-				<div class="x08"> 3000 тенге</div>
-			</div>
-			<div class="flex-column align-items-center text-center">
-				<div><icon icon="utensils" class="x15"/></div>
-				<div class="x15">Кухня</div>
-				<div class="x08">Узбекская, европейская кухня</div>
-			</div>
-			<div class="flex-column align-items-center text-center">
-				<div><icon icon="comment-dots" class="x15"/></div>
-				<div class="x15">Оставить отзыв</div>
-				<div class="x08"> Поделитесь впечатлениями</div>
-			</div>
-		</div>
-		<div class="backgroundImage flex-column justify-content-center" :style="'background-image:url('+image+');'">
-			<div class="half-width flex-column align-items-center ml-auto" style="height:80%;">
-				<div class="innerDiv flex-column p-3">
-					<div>О ресторане</div>
-					<div class="x08">
-						Атмосфера и Сервис в духе восточного гостеприимства позволят Вам почувствовать себя высокопочитаемым гостем, а окружающая роскошь и изысканность разнообразных угощений дадут Вам такое ощущение, словно Вы эмир или калиф. Другими словами, Вы сможете по-настоящему расслабиться и полноценно отдохнуть.
+			<div id="food"></div>
+			<div v-if="orderTime!=null">
+				<div class="flex-row flex-wrap align-items-center">
+					<div class="foodCard m-2 p-3" v-for="(item,index) in menu">
+						<div class="align-self-center">{{item.type}} {{item.name}}</div>
+						<hr/>
+						<div> {{item.description}}</div>
+						<div class="w-100 flex-row mt-auto align-self-center justify-content-around">
+							<div>{{item.price}} тг</div>
+							<button class="purple-button" @click="addFood(item)">Add</button>
+						</div>
 					</div>
-					<div class="x08">
-						 В Ак-Сарай Вы можете смело привозить своих гостей, приехавших к Вам из других городов или стран, мы абсолютно уверены, что именно посещение нашего ресторана останется для них одним из самых ярких впечатлений.
+				</div>
+				<div class="table m-2">
+					<div class="text-center">Order details</div>
+					<div class="flex-column">
+						<div class="flex-row">
+							<div class="col-6">
+								<input type="number" placeholder="Number" v-model="table.number"/>
+							</div>
+							<div class="col-6">
+								<input type="number" placeholder="Seats count" v-model="table.seatsCount">
+							</div>
+						</div>
+						<div class="flex-row justify-content-center">
+							<button class="purple-button" @click="confirm()">{{this.editing ? 'Edit' : 'Add'}}</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="flex-row justify-content-center">
-			<button class="pink-button mr-2 x15">Zagruzit' menu</button>
-			<button class="purple-button x15">Zagruzit' menu?</button>
+			
 		</div>
 	</div>			
 </template>
+<script type="text/javascript">
+export default{
+	props:{
+		restaurant:Object
+	},
+	data(){
+		return{
+			times:[],
+			orderTimes:[],
+			orderTime:null,
+			table:null,
+			menu:null,
+		}
+	},
+	methods:{
+		setTimes(){
+			var from  = new Date(this.restaurant.startTime),
+			to    = new Date(this.restaurant.endTime),
+			dates = [];
+
+			while(from <= to){
+				from.setMinutes(0);
+				from.setSeconds(0);
+
+				dates.push({time:new Date(from),active:false});
+				
+				from.setHours( from.getHours() + 1 );
+			}
+			this.times=dates;
+		},
+		async getTables(){
+			var tables;
+			await this.$http.get('client/tables/'+this.restaurant.restaurantId).then(response=>tables=response.data);
+			tables.forEach(table=>{
+				this.orderTimes.push({table:table,times:JSON.parse(JSON.stringify(this.times))});
+			})
+		},
+		async setOrderTimes(){
+			this.setTimes();
+			await this.getTables();
+			var orders;
+			var now=new Date();
+			await this.$http.post('client/orders/'+this.restaurant.restaurantId,now).then(response=>orders=response.data);
+			var vm=this;
+			orders.forEach(order=>{
+				var table = vm.orderTimes.find((e)=>e.table.tableId==order.tableId);
+				var time= table.times.find((e)=>e.time==order.startTime)
+				if(time){
+					time.active==true;
+				}
+			})
+		},
+		setOrderTime(table,time){
+			if(!time.active){
+				this.orderTime=time.time;
+				time.active=true;
+				this.scrollTo('food');
+			}else{
+				if(time==this.orderTime){
+					this.orderTime=null;
+					time.active=false;
+				}
+			}
+			this.table=table;
+		},
+		timeToString(time,boolean){
+			var str='';
+			time=new Date(time);
+			
+			var hours = time.getHours();
+			
+			str+=(hours+6).pad(2);
+			if(boolean){
+				var minutes = time.getMinutes();
+				str+=' : '+(minutes).pad(2);
+			}
+			return str;
+		},
+		async getFood(){
+			this.$http.get('client/food/restaurant/'+this.restaurant.restaurantId).then(response=>{
+				this.menu=response.data;
+			})
+		},
+		addFood(food){
+			this.$store.commit('addFood',food);
+		},
+		scrollTo(link){
+			var yOffset=-120;
+			const element = document.getElementById(link);
+			const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+			window.scrollTo({top: y, behavior: 'smooth'});
+		}
+	},
+	created(){
+		this.restaurant.image="../static/bar.png";
+		this.setOrderTimes();
+		this.getFood();
+	},
+	mounted(){
+		this.scrollTo('restaurant');
+	}
+};
+</script>
 <style scoped>
+.foodCard{
+	width:180px;
+	height: 250px;
+	display: flex;
+	flex-direction: column;
+	border:1px solid gray;
+	border-radius: 7px;
+	background-color:rgba(0,0,0,.2);
+
+}
+.active{
+	background-color: red;
+}
+.free{
+	background-color: green;
+}
+table{
+	display: initial !important;
+}
+table,td{
+	border:5px solid white;
+}
 .image{
 	width:100%;
 	min-width: 500px;
 }
 .grid{
 	display: grid;
-	grid-template-columns: 25% 25% 25% 25%;
+	grid-template-columns: 33.3% 33.3% 33.3%;
 }
 .grid > div:nth-child(n+2){
 	border-left:1px solid black;
@@ -110,12 +252,3 @@
 	}
 }
 </style>
-<script type="text/javascript">
-export default{
-	data(){
-		return{
-			image:'../static/bar.png'
-		}
-	}
-};
-</script>

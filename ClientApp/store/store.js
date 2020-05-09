@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import actions from './actions'
 import mutations from './mutations'
 import state from './state'
+import getters from './getters'
 
 Vue.use(Vuex)
 
@@ -12,10 +13,14 @@ const MAIN_SET_COUNTER = 'MAIN_SET_COUNTER'
 const store = new  Vuex.Store({
 	state,
 	mutations,
-	actions
+	actions,
+	getters
 });
 store.subscribe((mutation, state) => {
-	var cache=JSON.stringify(state);
-	localStorage.setItem('store', cache);
+	var cache={
+		user:state.user,
+		city:state.city
+	}
+	localStorage.setItem('store', JSON.stringify(cache));
 });
 export default store;

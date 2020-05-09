@@ -10,8 +10,8 @@ using newProjectJs.Data;
 namespace newProjectJs.Migrations
 {
     [DbContext(typeof(CafeContext))]
-    [Migration("20200423140011_initialAgain")]
-    partial class initialAgain
+    [Migration("20200508133913_foodCities")]
+    partial class foodCities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,18 @@ namespace newProjectJs.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("newProjectJs.Models.City", b =>
+                {
+                    b.Property<int>("CityId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("CityId");
+
+                    b.ToTable("Cities");
+                });
+
             modelBuilder.Entity("newProjectJs.Models.Client", b =>
                 {
                     b.Property<int>("ClientId")
@@ -72,6 +84,10 @@ namespace newProjectJs.Migrations
                     b.Property<int>("FoodId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("CityId");
+
+                    b.Property<string>("Description");
+
                     b.Property<string>("Name");
 
                     b.Property<int>("Price");
@@ -81,6 +97,8 @@ namespace newProjectJs.Migrations
                     b.Property<string>("Type");
 
                     b.HasKey("FoodId");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("RestaurantId");
 
@@ -124,6 +142,8 @@ namespace newProjectJs.Migrations
 
                     b.Property<DateTime>("EndTime");
 
+                    b.Property<int>("RestaurantId");
+
                     b.Property<DateTime>("StartTime");
 
                     b.Property<int>("TableId");
@@ -131,6 +151,8 @@ namespace newProjectJs.Migrations
                     b.HasKey("OrderId");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("RestaurantId");
 
                     b.HasIndex("TableId");
 
@@ -158,11 +180,29 @@ namespace newProjectJs.Migrations
 
                     b.Property<string>("Address");
 
+                    b.Property<int>("AvarageMoney");
+
+                    b.Property<string>("BigDescription");
+
+                    b.Property<int>("CityId");
+
+                    b.Property<string>("Contacts");
+
+                    b.Property<DateTime>("EndTime");
+
+                    b.Property<string>("Kitchen");
+
+                    b.Property<string>("LittleDescription");
+
                     b.Property<int>("ManagerId");
 
                     b.Property<string>("Name");
 
+                    b.Property<DateTime>("StartTime");
+
                     b.HasKey("RestaurantId");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("ManagerId");
 
@@ -174,11 +214,11 @@ namespace newProjectJs.Migrations
                     b.Property<int>("TableId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Active");
-
                     b.Property<int>("Number");
 
                     b.Property<int>("RestaurantId");
+
+                    b.Property<int>("SeatsCount");
 
                     b.HasKey("TableId");
 
@@ -189,6 +229,11 @@ namespace newProjectJs.Migrations
 
             modelBuilder.Entity("newProjectJs.Models.Food", b =>
                 {
+                    b.HasOne("newProjectJs.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("newProjectJs.Models.Restaurant", "Restaurant")
                         .WithMany()
                         .HasForeignKey("RestaurantId")
@@ -210,6 +255,11 @@ namespace newProjectJs.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("newProjectJs.Models.Restaurant", "restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("newProjectJs.Models.Table", "Table")
                         .WithMany()
                         .HasForeignKey("TableId")
@@ -218,6 +268,11 @@ namespace newProjectJs.Migrations
 
             modelBuilder.Entity("newProjectJs.Models.Restaurant", b =>
                 {
+                    b.HasOne("newProjectJs.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("newProjectJs.Models.Manager", "Manager")
                         .WithMany()
                         .HasForeignKey("ManagerId")

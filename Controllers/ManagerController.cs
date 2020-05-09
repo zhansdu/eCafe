@@ -19,6 +19,7 @@ public class ManagerController : Controller
     public async Task<ActionResult<List<Restaurant>>> GetRestaurants(string id)
     {
         var restaurants = await db.Restaurants.Where((r)=>r.ManagerId==int.Parse(id)).ToListAsync();
+        restaurants.ForEach((obj) => { obj.City = db.Cities.Find(obj.CityId); });
         return Ok(restaurants);
     }
     [HttpPut("restaurant")]

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace newProjectJs.Migrations
 {
-    public partial class initialAgain : Migration
+    public partial class foodCities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,6 +24,19 @@ namespace newProjectJs.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Admins", x => x.AdminId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    CityId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.CityId);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,11 +105,25 @@ namespace newProjectJs.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    ManagerId = table.Column<int>(nullable: false)
+                    ManagerId = table.Column<int>(nullable: false),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    LittleDescription = table.Column<string>(nullable: true),
+                    BigDescription = table.Column<string>(nullable: true),
+                    CityId = table.Column<int>(nullable: false),
+                    Kitchen = table.Column<string>(nullable: true),
+                    Contacts = table.Column<string>(nullable: true),
+                    AvarageMoney = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Restaurants", x => x.RestaurantId);
+                    table.ForeignKey(
+                        name: "FK_Restaurants_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "CityId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Restaurants_Managers_ManagerId",
                         column: x => x.ManagerId,
@@ -113,12 +140,20 @@ namespace newProjectJs.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     Price = table.Column<int>(nullable: false),
-                    RestaurantId = table.Column<int>(nullable: false)
+                    RestaurantId = table.Column<int>(nullable: false),
+                    CityId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Food", x => x.FoodId);
+                    table.ForeignKey(
+                        name: "FK_Food_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "CityId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Food_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
@@ -134,7 +169,7 @@ namespace newProjectJs.Migrations
                     TableId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Number = table.Column<int>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
+                    SeatsCount = table.Column<int>(nullable: false),
                     RestaurantId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -154,10 +189,11 @@ namespace newProjectJs.Migrations
                 {
                     OrderId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    RestaurantId = table.Column<int>(nullable: false),
                     TableId = table.Column<int>(nullable: false),
+                    ClientId = table.Column<int>(nullable: false),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
-                    ClientId = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -170,12 +206,23 @@ namespace newProjectJs.Migrations
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Orders_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Orders_Tables_TableId",
                         column: x => x.TableId,
                         principalTable: "Tables",
                         principalColumn: "TableId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Food_CityId",
+                table: "Food",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Food_RestaurantId",
@@ -193,9 +240,19 @@ namespace newProjectJs.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_RestaurantId",
+                table: "Orders",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_TableId",
                 table: "Orders",
                 column: "TableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Restaurants_CityId",
+                table: "Restaurants",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Restaurants_ManagerId",
@@ -227,6 +284,9 @@ namespace newProjectJs.Migrations
 
             migrationBuilder.DropTable(
                 name: "Restaurants");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
 
             migrationBuilder.DropTable(
                 name: "Managers");

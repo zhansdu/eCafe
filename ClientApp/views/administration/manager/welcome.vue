@@ -23,7 +23,7 @@
 					<div class="flex-row">
 						<div class="col-1 text-center">Number</div>
 						<div class="col-4 text-center">Name</div>
-						<div class="col-4 text-center">Address</div>
+						<div class="col-4 text-center">City</div>
 						<div class="col-3 flex-row justify-content-around">
 							Editing
 						</div>
@@ -31,7 +31,7 @@
 					<div class="flex-row" v-for="(restaurant,index) in restaurants" :key="index">
 						<div class="col-1 text-center">{{index+1}}</div>
 						<div class="col-4 text-center">{{restaurant.name}}</div>
-						<div class="col-4 text-center">{{restaurant.address}}</div>
+						<div class="col-4 text-center">{{restaurant.city.name}}</div>
 						<div class="col-3 flex-row justify-content-around">
 							<div class="cursor-pointer" @click="edit(restaurant)"><icon icon="pen"/></div>
 						</div>
@@ -72,26 +72,15 @@ export default{
 };
 </script>
 <style scoped>
-.main{
-	width:80vw;
-}
-#sidebar{
-	background: #5A6D8A;
-	height: 100vh;
-}
-#sidebar,#navbar{
-	position: sticky;
-	top:0;
-}
-#navbar{
-	display: flex;
-	flex-direction: column;
-	width:100%;
-	z-index: 2;
-	background-color: white;
-}
 #navbar > div{
 	align-items:  center;
+}
+#navbar{
+	height:9.5vh;
+	min-height: 50px;
+}
+#sidebar{
+	background:#5A6D8A;
 }
 .pilled{
 	background-color:rgba(0,0,0,0.4);

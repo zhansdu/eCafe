@@ -4,9 +4,37 @@
 			<div class="text-center">EDIT A RESTAURANT</div>
 			<div class="flex-column">
 				<div class="flex-row">
+					<div class="col-4">
+						<label>Contacts</label>
+						<input type="text" v-model="restaurant.contacts"/>
+					</div>
+					<div class="col-4">
+						<label >Name</label>
+						<input type="text" v-model="restaurant.name">
+					</div>
+					<div class="col-4">
+						<label>Address</label>
+						<input type="text" v-model="restaurant.address">
+					</div>					
+				</div>
+				<div class="flex-row">
 					<div class="col-6">
-						<label>Name</label>
-						<input type="text" v-model="restaurant.name"/>
+						<label>Big Description</label>
+						<textarea placeholder="Description" v-model="restaurant.bigDescription"/>
+					</div>
+					<div class="col-6">
+						<label>Little Description</label>
+						<textarea placeholder="Description" v-model="restaurant.littleDescription"/>
+					</div>
+				</div>
+				<div class="flex-row">
+					<div class="col-3">
+						<label>Avatage check</label>
+						<input type="text" v-model="restaurant.avarageMoney"/>
+					</div>
+					<div class="col-3">
+						<label>Kitchen</label>
+						<input type="text" v-model="restaurant.kitchen"/>
 					</div>
 					<div class="col-3">
 						<label >Work start time</label>
@@ -15,12 +43,6 @@
 					<div class="col-3">
 						<label>Work end time</label>
 						<input type="time" v-model="time.end">
-					</div>
-				</div>
-				<div class="flex-row">
-					<div class="col-12">
-						<label>Description</label>
-						<textarea placeholder="Description" v-model="restaurant.description"/>
 					</div>
 				</div>
 				<div class="flex-row justify-content-center">
@@ -71,5 +93,8 @@ label{
 	display: flex;
 	align-items:center;
 	justify-content: center;
+}
+textarea{
+	height:400px;
 }
 </style>
