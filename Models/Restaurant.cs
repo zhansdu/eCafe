@@ -8,8 +8,8 @@ namespace newProjectJs.Models
         public string Address { get; set; }
         public int ManagerId {get;set;}
         public Manager Manager { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
         public string LittleDescription { get; set; }
         public string BigDescription { get; set; }
         public int CityId { get; set; }

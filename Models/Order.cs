@@ -10,8 +10,8 @@ namespace newProjectJs.Models
         public Table Table { get; set; }
         public int ClientId{get;set;}
         public Client Client { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
         public Boolean Active { get; set; }
     }
 }

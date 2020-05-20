@@ -61,6 +61,7 @@ export default{
 				start:{},
 				end:{}
 			},
+			file:null
 		}
 	},
 	methods:{
@@ -82,7 +83,7 @@ export default{
 			this.$http.put('manager/restaurant',this.restaurant).then(response=>{
 				alert(response.statusText);
 				this.$store.commit('setEditingRestaurant',this.restaurant);
-			})
+			});
 		}
 	}
 };

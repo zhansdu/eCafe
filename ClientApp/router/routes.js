@@ -20,6 +20,11 @@ import managerRestaurant from '../views/administration/manager/restaurant/restau
 
 import login from '../views/auth/login'
 import register from '../views/auth/register'
+
+import profile from '../views/shared/profile/profile'
+import profileDashboard from '../views/shared/profile/dashboard'
+import profileSettings from '../views/shared/profile/settings'
+
 import error from '../views/shared/error'
 
 export const routes = 
@@ -269,6 +274,22 @@ export const routes =
 			icon:'glass-cheers'
 		},
 	}]
+},
+{
+	name:'profile',
+	path:'/account',
+	component:profile,
+	children:[{
+		name:'profile.dashboard',
+		path:'dashboard',
+		component:profileDashboard
+	},
+	{
+		name:'profile.settings',
+		path:'settings',
+		component:profileSettings
+	},
+	]
 },
 {
 	name:'register',

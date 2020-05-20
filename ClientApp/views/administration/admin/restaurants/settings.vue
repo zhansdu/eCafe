@@ -45,11 +45,13 @@ export default{
 		this.managers=await this.$http.get('admin/managers');
 		this.managers.data.forEach(element=>{
 			element.label=element.firstName+' '+element.lastName;
-		})
+		});
+		console.log(this.managers);
 		this.cities=await this.$http.get('admin/cities');
 		this.cities.data.forEach(element=>{
 			element.label=element.name;
 		})
+		console.log(this.cities);
 	}
 };
 </script>

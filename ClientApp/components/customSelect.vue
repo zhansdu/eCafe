@@ -16,7 +16,12 @@ export default{
 	computed:{
 		place(){
 			if(this.value!=null){
-				return this.value.label
+				if(Object.keys(this.value).length>0){
+					return this.value.label
+				}
+				else{
+					return this.placeholder
+				}
 			}
 			else{
 				return this.placeholder

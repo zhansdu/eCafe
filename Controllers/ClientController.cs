@@ -19,21 +19,25 @@ public class ClientController : Controller
     [HttpGet("restaurants")]
     public async Task<ActionResult<List<Restaurant>>> GetRestaurants()
     {
-        return Ok(await db.Restaurants.ToListAsync());
+        List<Restaurant> restaurants = await db.Restaurants.ToListAsync();
+        restaurants.ForEach((Restaurant restaurant) => { restaurant.City = db.Cities.Find(restaurant.CityId); });
+        return Ok(restaurants);
     }
     //get by city restaurants
     [HttpGet("restaurants/{id}")]
     public async Task<ActionResult<List<Restaurant>>> GetRestaurantByCity(string id)
     {
         List<Restaurant> restaurants=await db.Restaurants.Where((arg)=>arg.CityId==int.Parse(id)).ToListAsync();
+        restaurants.ForEach((Restaurant restaurant) => { restaurant.City = db.Cities.Find(restaurant.CityId); });
         return Ok(restaurants);
     }
     //get restaurant by id
     [HttpGet("restaurant/{id}")]
     public async Task<ActionResult<Restaurant>> GetRestaurantById(string id)
     {
-        Restaurant restauarnts = await db.Restaurants.FindAsync(int.Parse(id));
-        return Ok(restauarnts);
+        Restaurant restaurant = await db.Restaurants.FindAsync(int.Parse(id));
+        restaurant.City=await db.Cities.FindAsync(restaurant.CityId);
+        return Ok(restaurant);
     }
     //get food by city
     [HttpGet("food/city/{id}")]
@@ -59,8 +63,20 @@ public class ClientController : Controller
     [HttpPost("orders/{id}")]
     public async Task<ActionResult<List<Order>>> GetOrders(string id,[FromBody]DateTime time)
     {
-        List<Order> orders= await db.Orders.Where((order)=>(order.RestaurantId==int.Parse(id))&&(order.StartTime.Date==time.Date)).ToListAsync();
+        Order any=await db.Orders.LastAsync();
+
+        Console.WriteLine(any.StartTime.Date);
+        Console.WriteLine(time.Date);
+        Console.WriteLine(any.StartTime.Date==time.Date);
+        List<Order> orders= await db.Orders.Where((order)=>(order.RestaurantId==int.Parse(id))&&(order.StartTime.Date.ToString("d")==time.Date.ToString("d"))).ToListAsync();
         return Ok(orders);
+    }
+    [HttpPost("order")]
+    public async Task<ActionResult> AddOrder([FromBody]Order order)
+    {
+        await db.Orders.AddAsync(order);
+        await db.SaveChangesAsync();
+        return Ok();
     }
     [HttpGet("cities")]
     public async Task<ActionResult<List<City>>> GetCities()

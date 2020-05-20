@@ -1,23 +1,23 @@
 <template>
 	<div class="flex-column">
-		<div class="imageBrand"/>
+		<img src="../../../assets/images/tarelka.png" width="100%" />
+		<div v-if="restaurants.length==0" class="flex-column align-items-center justify-content-center h-100">
+			<h3>Sorry, there are no restaurants</h3>
+		</div>
 		<div class="restaurantGrid" style="margin-top:2vw;">
 			<div class="restaurantCard p-3" v-for="(restaurant,index) in restaurants" :key="index">	
-				<div class="x15 align-self-center">{{restaurant.name}}</div>
+				<div class="x15 align-self-center mt-1">{{restaurant.name}}</div>
 				<div>
 					<div class="line"/>
-					<div class="flex-column">
+					<div class="flex-column mt-1">
 						<div>Working time : {{getTime(restaurant.startTime)}} - {{getTime(restaurant.endTime)}}</div>
 						<div>Kitchen : {{restaurant.kitchen}}</div>
+						<div>City: {{restaurant.city.name}}</div>
 						<div>About restaurant :<br> {{restaurant.littleDescription}}</div>
 					</div>
 				</div>
-				<button class="button align-self-center text-center cursor-pointer" @click="more(restaurant)">More</button>
+				<button class="button align-self-center text-center cursor-pointer mt-auto" @click="more(restaurant)">More</button>
 			</div>
-		</div>
-		<div class="flex-row justify-content-center" style="margin-top:2vw;margin-bottom:2vw;">
-			<button class="squareButton x15 pink-button"> Order a Table</button>
-			<button class="squareButton x15 purple-button ml-3"> Order Food</button>
 		</div>
 	</div>
 </template>
@@ -51,6 +51,7 @@ export default{
 			else{
 				this.$http.get('client/restaurants').then(response=>{
 					this.restaurants=response.data;
+					console.log(response.data);
 				});
 			}
 		},
@@ -58,7 +59,7 @@ export default{
 			time=new Date(time);
 			var hours = time.getHours();
 			var minutes = time.getMinutes();
-			return (hours+6).pad(2)+' : '+(minutes).pad(2);
+			return (hours).pad(2)+' : '+(minutes).pad(2);
 		},
 		more(restaurant){
 			this.goTo('client.restaurant',{restaurant:restaurant})
@@ -76,7 +77,6 @@ export default{
 	border-radius: 3px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-around;
 	height:300px;
 }
 .line{
@@ -96,13 +96,5 @@ export default{
 	display: grid;
 	grid-template-columns: 33% 33% 33%;
 	grid-gap: 1vw;
-}
-.imageBrand{
-	background-image: url('../../../assets/images/tarelka.png');
-	background-size: cover;
-	background-repeat: no-repeat;
-	width: 100%;
-	min-height: 218px;
-	height:30vw;
 }
 </style>

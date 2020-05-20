@@ -19,7 +19,8 @@ const store = new  Vuex.Store({
 store.subscribe((mutation, state) => {
 	var cache={
 		user:state.user,
-		city:state.city
+		city:state.city,
+		editingRestaurant:state.editingRestaurant
 	}
 	localStorage.setItem('store', JSON.stringify(cache));
 });

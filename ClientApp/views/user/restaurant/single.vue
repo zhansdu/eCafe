@@ -13,10 +13,9 @@
 					<div class="x08">{{restaurant.contacts}}</div>
 				</div>
 				<div class="flex-column align-items-center text-center">
-					<div><icon class="cursor-pointer x15" icon="comment-dots" @click="scrollTo('tables')"/></div>
-					<div class="x15">Столики</div>
-					<div class="x08">Online оформление заявки </div>
-					<div class="x08">на проведение мероприятия</div>
+					<div><icon class="x15" icon="city"/></div>
+					<div class="x15">Город</div>
+					<div class="x08">{{restaurant.city.name}}</div>
 				</div>
 			</div>
 			<div class="backgroundImage flex-column justify-content-center" :style="'background-image:url('+restaurant.image+');'">
@@ -45,23 +44,25 @@
 				</div>
 			</div>
 		</div>
-		<div class="w-100" v-if="$user.authenticated()">
-			<div class="p-2 flex-column align-items-center" id="tables">
+		<div class="flex-column align-items-center m-3"><button class="squareButton x15 purple-button ml-3" @click="setConfirmation()">Order a table</button></div>
+		<div  id="tables"></div>
+		<div class="w-100" v-if="confirmed">
+			<div class="p-2 flex-column align-items-center">
 				<table class="table">
 					<tr class="text-center">TABLES</tr>
 					<tr>
-						<td>Table / Time</td>
-						<td v-for="(time,index) in times" :key="index">{{timeToString(time.time,false)}}</td>
+						<td>Time / Table</td>
+						<td v-for="(time,index) in times" :key="index">{{presentTime(time)}}</td>
 					</tr>
 					<tr v-for="(table,index) in orderTimes" :key="index">
 						<td>#{{table.table.number}} / {{table.table.seatsCount}} seats</td>
-						<td class="cursor-pointer" v-for="(time,index) in table.times" :key="index" :class="time.active ? 'active' : 'free'" @click="setOrderTime(table,time)">
+						<td class="cursor-pointer" v-for="(time,index) in table.times" :key="index" :class="time.active ? 'active' : 'free'" @click="setOrderTime(table.table,time)">
 						</td>
 					</tr>
 				</table>
 			</div>
 			<div id="food"></div>
-			<div v-if="orderTime!=null">
+			<div v-if="orderStartTime!=null">
 				<div class="flex-row flex-wrap align-items-center">
 					<div class="foodCard m-2 p-3" v-for="(item,index) in menu">
 						<div class="align-self-center">{{item.type}} {{item.name}}</div>
@@ -77,20 +78,37 @@
 					<div class="text-center">Order details</div>
 					<div class="flex-column">
 						<div class="flex-row">
-							<div class="col-6">
-								<input type="number" placeholder="Number" v-model="table.number"/>
+							<div class="col-4">
+								<span>Order time</span>
+								<input type="text" disabled :value="'from '+timeToString(orderStartTime)+' to '+timeToString(orderEndTime)"/>
 							</div>
-							<div class="col-6">
-								<input type="number" placeholder="Seats count" v-model="table.seatsCount">
+							<div class="col-4">
+								<span>Restaurant</span>
+								<input type="text" disabled :value="restaurant.name"/>
+							</div>
+							<div class="col-4">
+								<span>Table number</span>
+								<input type="text" disabled :value="table.number"/>
+							</div>
+						</div>
+						<div class="flex-row">
+							<div class="col-12">
+								<span>Food</span>
+								<li class="dropdown-item flex-row align-items-center" v-for="(food,index) in $store.state.food">
+									<div style="overflow:hidden;width:350px;">
+										{{food.type}} {{food.name}} {{food.price}}
+									</div>
+									<icon icon="trash" class="cursor-pointer" @click="removeFood(index)"/>
+								</li>
+								<span>Total : {{total}}</span>
 							</div>
 						</div>
 						<div class="flex-row justify-content-center">
-							<button class="purple-button" @click="confirm()">{{this.editing ? 'Edit' : 'Add'}}</button>
+							<button class="purple-button" @click="confirm()">Confirm</button>
 						</div>
 					</div>
 				</div>
-			</div>
-			
+			</div>	
 		</div>
 	</div>			
 </template>
@@ -103,69 +121,103 @@ export default{
 		return{
 			times:[],
 			orderTimes:[],
-			orderTime:null,
+			orderStartTime:null,
+			orderEndTime:null,
 			table:null,
 			menu:null,
+			order:{
+				restaurantId:this.restaurant.restaurantId,
+				clientId:this.$user.user().clientId
+			},
+			confirmed:false,
+			date:null
 		}
 	},
+	computed:{
+		total(){
+			var int=0;
+			if(this.$store.state.food.length>0){
+				this.$store.state.food.forEach(elem=>{
+					int+=elem.price;
+				})
+			}
+			return int;
+		},
+	},
 	methods:{
-		setTimes(){
-			var from  = new Date(this.restaurant.startTime),
-			to    = new Date(this.restaurant.endTime),
-			dates = [];
-
+		setTimes(object,date){ /*from where to where in table*/
+			var from = new Date(date),
+			to = new Date(date);
+			to.setHours(to.getHours()-1);
+			from.setMinutes(0);
+			from.setSeconds(0);
 			while(from <= to){
-				from.setMinutes(0);
-				from.setSeconds(0);
 
-				dates.push({time:new Date(from),active:false});
+				object.push({time:new Date(from),active:false});
 				
 				from.setHours( from.getHours() + 1 );
 			}
-			this.times=dates;
 		},
-		async getTables(){
+		async getTables(){/*tables in tables and green blocs (orderTimes) */
 			var tables;
 			await this.$http.get('client/tables/'+this.restaurant.restaurantId).then(response=>tables=response.data);
 			tables.forEach(table=>{
-				this.orderTimes.push({table:table,times:JSON.parse(JSON.stringify(this.times))});
+				var times= [];
+				this.setTimes(times);
+				this.orderTimes.push({table:table,times:times});
 			})
 		},
-		async setOrderTimes(){
-			this.setTimes();
+		async setOrderTimes(){ /*main function on begining */
+			// making matrix
+			this.setTimes(this.times);
 			await this.getTables();
+			// done with matrix
+			// get orders
 			var orders;
 			var now=new Date();
-			await this.$http.post('client/orders/'+this.restaurant.restaurantId,now).then(response=>orders=response.data);
+			await this.$http.post('client/orders/'+this.restaurant.restaurantId,now).then(response=>{orders=response.data;});
+			// done getting orders
+			// set red blocks
 			var vm=this;
 			orders.forEach(order=>{
 				var table = vm.orderTimes.find((e)=>e.table.tableId==order.tableId);
-				var time= table.times.find((e)=>e.time==order.startTime)
+				var orderTime=new Date(order.startTime);
+				console.log(orderTime);
+				var time= table.times.find((e)=>e.time.getHours()==orderTime.getHours());
 				if(time){
-					time.active==true;
+					time.active=true;
+					console.log(time);
 				}
 			})
+			// everything done
 		},
 		setOrderTime(table,time){
-			if(!time.active){
-				this.orderTime=time.time;
+			// when clicking green blocks
+			if(!this.table){
 				time.active=true;
+				this.orderStartTime=time.time;
+				var timex=new Date(JSON.parse(JSON.stringify(time.time)));
+				timex.setHours(timex.getHours()+1);
+				this.orderEndTime=timex;
+				this.table=table;
 				this.scrollTo('food');
-			}else{
-				if(time==this.orderTime){
-					this.orderTime=null;
+			}
+			else{
+				if(time.time==this.orderStartTime){
+					this.orderStartTime=null;
 					time.active=false;
+					this.table=null;
 				}
 			}
-			this.table=table;
 		},
 		timeToString(time,boolean){
+			// representative time supporting method for presentTime
 			var str='';
 			time=new Date(time);
 			
 			var hours = time.getHours();
 			
-			str+=(hours+6).pad(2);
+			str+=(hours).pad(2);
 			if(boolean){
 				var minutes = time.getMinutes();
 				str+=' : '+(minutes).pad(2);
@@ -173,6 +225,7 @@ export default{
 			return str;
 		},
 		async getFood(){
+			// get menu
 			this.$http.get('client/food/restaurant/'+this.restaurant.restaurantId).then(response=>{
 				this.menu=response.data;
 			})
@@ -180,17 +233,46 @@ export default{
 		addFood(food){
 			this.$store.commit('addFood',food);
 		},
+		removeFood(index){
+			this.$store.commit('removeFood',index)
+		},
 		scrollTo(link){
 			var yOffset=-120;
 			const element = document.getElementById(link);
 			const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 			window.scrollTo({top: y, behavior: 'smooth'});
+		},
+		presentTime(time){
+			// respresentative time in matrix
+			var then = new Date(JSON.parse(JSON.stringify(time.time)));
+			then.setHours(then.getHours()+1);
+			return this.timeToString(time.time,false)+' - '+this.timeToString(then,false);
+		},
+		confirm(){
+			this.order.active=true;
+			this.order.startTime=this.orderStartTime;
+			this.order.endTime=this.orderEndTime;
+			this.order.tableId=this.table.tableId;
+			console.log(this.order.startTime);
+			// this.$http.post('client/order',this.order).then(response=>alert(response.statusText));
+		},
+		setConfirmation(){
+			// checks if user's logged in 
+			if(this.$user.authenticated()){
+				this.confirmed=true;
+				this.scrollTo('tables')
+			}
+			else{
+				alert('You need to login first');
+			}
 		}
 	},
 	created(){
 		this.restaurant.image="../static/bar.png";
 		this.setOrderTimes();
 		this.getFood();
+		console.log(new Date());
+
 	},
 	mounted(){
 		this.scrollTo('restaurant');

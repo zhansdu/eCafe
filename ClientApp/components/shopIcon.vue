@@ -3,7 +3,6 @@
 		<icon icon="shopping-basket" class="x13 position-relative" @click="toggle=!toggle"/>
 		<div class="countItem" v-if="food.length>0"/>
 		<ul class="dropdown-menu dropdown-menu-right" v-if="toggle">
-			<li class="dropdown-item" @click="goTo('order')">Order</li>
 			<li class="dropdown-divider" v-if="food.length>0"/>
 			<li class="dropdown-item flex-row align-items-center" v-for="(food,index) in food">
 				<div style="overflow:hidden;width:250px;">
